@@ -1,0 +1,6 @@
+framework module LongPressTableViewReordering {
+  umbrella header "LongPressTableViewReordering-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'LongPressTableViewReordering_Example' do
+  pod 'LongPressTableViewReordering', :path => '../'
+
+  target 'LongPressTableViewReordering_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

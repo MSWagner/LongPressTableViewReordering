@@ -1,0 +1,16 @@
+PODS:
+  - LongPressTableViewReordering (0.1.0)
+
+DEPENDENCIES:
+  - LongPressTableViewReordering (from `../`)
+
+EXTERNAL SOURCES:
+  LongPressTableViewReordering:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  LongPressTableViewReordering: 90807975de73f7ff65ec55364badf5f7fde7dc48
+
+PODFILE CHECKSUM: 731d329af923c08799731a3435ab783d38de0525
+
+COCOAPODS: 1.0.1

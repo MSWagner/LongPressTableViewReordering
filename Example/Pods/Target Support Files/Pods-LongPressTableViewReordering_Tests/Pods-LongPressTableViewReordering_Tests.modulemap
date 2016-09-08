@@ -1,0 +1,6 @@
+framework module Pods_LongPressTableViewReordering_Tests {
+  umbrella header "Pods-LongPressTableViewReordering_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
