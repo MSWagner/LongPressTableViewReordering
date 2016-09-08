@@ -1,42 +1,25 @@
-#
-# Be sure to run `pod lib lint LongPressTableViewReordering.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = 'LongPressTableViewReordering'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of LongPressTableViewReordering.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.version          = '0.0.1'
+s.summary          = 'LongPressTableViewReordering lets you long press to reorder cells in a UITableView.'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+LongPressTableViewReordering is a Swift library that lets you
+long press to reorder cells in a UITableView.
+
+LongPressTableViewReorderer extends the UITableViewDataSource
+protocol. Just implement the protocol to automatically enable
+this functionality for any table view.
+
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/LongPressTableViewReordering'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/danielsaidi/LongPressTableViewReordering'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Daniel Saidi' => 'daniel.saidi@bookbeat.com' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/LongPressTableViewReordering.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => 'https://github.com/danielsaidi/LongPressTableViewReordering.git', :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/danielsaidi'
 
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'LongPressTableViewReordering/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'LongPressTableViewReordering' => ['LongPressTableViewReordering/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

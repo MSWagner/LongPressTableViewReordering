@@ -1,29 +1,74 @@
 # LongPressTableViewReordering
 
-[![CI Status](http://img.shields.io/travis/Daniel Saidi/LongPressTableViewReordering.svg?style=flat)](https://travis-ci.org/Daniel Saidi/LongPressTableViewReordering)
+[![CI Status](http://img.shields.io/travis/danielsaidi/LongPressTableViewReordering.svg?style=flat)](https://travis-ci.org/danielsaidi/LongPressTableViewReordering)
 [![Version](https://img.shields.io/cocoapods/v/LongPressTableViewReordering.svg?style=flat)](http://cocoapods.org/pods/LongPressTableViewReordering)
 [![License](https://img.shields.io/cocoapods/l/LongPressTableViewReordering.svg?style=flat)](http://cocoapods.org/pods/LongPressTableViewReordering)
 [![Platform](https://img.shields.io/cocoapods/p/LongPressTableViewReordering.svg?style=flat)](http://cocoapods.org/pods/LongPressTableViewReordering)
 
-## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+## What is this?
 
-## Requirements
+LongPressTableViewReordering is a Swift library, that lets you reorder
+cells in a UITableView by long pressing any cell in the table view.
+
+
+## How does it work?
+
+To add long press reorder functionality to a table view, make the data
+source implement the LongPressTableViewReorderer protocol as well. The
+protocol (due to Swift limitations) must be a bit tweaked to work, but
+it is fairly straightforward.
+
+First, the protocol requires two backing fields. Just declare them and
+leave them without an initial value. You will never use the properties
+yourself, but the protocol extension will use them under the hood.
+
+Second, call the `enableLongPressReorderingForTableView(...)` function
+to enable long press reordering. Since a protocol extension cannot set
+a target action, you must inject a gesture listener function as use it
+to call `longPressReorderGestureChanged(...)` from your class.
+
+If you know a better way to achieve the same result, feel free to help.
+
+
+
+## Example Project
+
+The example project is currently empty. I will add a reorderable table
+view whenever I manage to find some time in this crazy world of ours.
+
+
 
 ## Installation
 
-LongPressTableViewReordering is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+
+### Cocoapods
+
+This lib is available through [CocoaPods](http://cocoapods.org/). Just
+add the following line to your Podfile and run `pod install` to add it
+to your project.
 
 ```ruby
 pod "LongPressTableViewReordering"
 ```
 
+
+
+## Versioning
+
+Versions < 1.0.0 will have breaking changes between minor versions, so
+LongPressTableViewReordering 0.3.0 may not be compatible with 0.2.0.
+
+
+
 ## Author
 
-Daniel Saidi, daniel.saidi@bookbeat.com
+Daniel Saidi, daniel.saidi@gmail.com
+
+
 
 ## License
 
-LongPressTableViewReordering is available under the MIT license. See the LICENSE file for more info.
+LongPressTableViewReordering is available under the MIT license.
+See the LICENSE file for more info.
+
