@@ -12,6 +12,19 @@ LongPressTableViewReordering is a Swift library, that lets you reorder
 cells in a UITableView by long pressing any cell in the table view.
 
 
+
+## Acknowledgement
+
+This project is a Swift adaption of the original obj-c approach posted
+by Soheil Ahzarpour on raywenderlich.com, March 24, 2014:
+
+[Read the original post](https://www.raywenderlich.com/63089/cookbook-moving-table-view-cells-with-a-long-press-gesture)
+
+I will add more features to this lib if I need more in my own projects,
+but wherever the project goes, it wouldn't have existed without Soheil.
+
+
+
 ## How does it work?
 
 To add long press reorder functionality to a table view, make the data
