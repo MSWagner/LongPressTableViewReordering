@@ -1,5 +1,5 @@
 PODS:
-  - LongPressTableViewReordering (0.1.0)
+  - LongPressTableViewReordering (0.0.2)
 
 DEPENDENCIES:
   - LongPressTableViewReordering (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LongPressTableViewReordering: 90807975de73f7ff65ec55364badf5f7fde7dc48
+  LongPressTableViewReordering: b803e5d0616db36ad9ac8e45087c526e52d351b3
 
 PODFILE CHECKSUM: 731d329af923c08799731a3435ab783d38de0525
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.0.rc.2
