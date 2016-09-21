@@ -14,7 +14,7 @@ public protocol LongPressTableViewReorderer: class, UITableViewDataSource {
     var longPressReorderSnapshot : UIView! { get set }
     var longPressReorderInitialIndexPath : IndexPath! { get set }
     
-    func longPressReorderingDidFinishInTableView(_ tableView: UITableView)
+    func longPressReorderingDidFinish(in tableView: UITableView)
 }
 
 
@@ -23,7 +23,7 @@ public extension LongPressTableViewReorderer {
     
     // MARK: - Public functions
     
-    public func enableLongPressReorderingForTableView(_ view: UITableView, withGestureTarget target: AnyObject?, action: Selector) {
+    public func enableLongPressReordering(for view: UITableView, withTarget target: AnyObject?, action: Selector) {
         let longPress = UILongPressGestureRecognizer(target: target, action: action)
         view.addGestureRecognizer(longPress)
     }
@@ -35,9 +35,9 @@ public extension LongPressTableViewReorderer {
         let cell = indexPath != nil ? view.cellForRow(at: indexPath!) : nil
         
         switch gesture.state {
-        case .began: beginReorderingCell(cell, atIndexPath: indexPath, inView: view, location: location)
-        case .changed: reorderCell(cell, atIndexPath: indexPath, inView: view, location: location)
-        default: finishReorderCell(cell, inView: view)
+        case .began: beginReordering(of: cell, atIndexPath: indexPath, in: view, location: location)
+        case .changed: reorder(cell, atIndexPath: indexPath, in: view, location: location)
+        default: finishReordering(of: cell, in: view)
         }
     }
     
@@ -45,13 +45,12 @@ public extension LongPressTableViewReorderer {
     
     // MARK: - Private functions
     
-    fileprivate func beginReorderingCell(_ cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, inView view: UITableView, location: CGPoint) {
-        guard cell != nil else { return }
-        guard indexPath != nil else { return }
-        guard tableView!(view, canMoveRowAt: indexPath!) else { return }
+    fileprivate func beginReordering(of cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
+        let canMove = tableView!(view, canMoveRowAt: indexPath!)
+        guard cell != nil, indexPath != nil, canMove else { return }
         
         longPressReorderInitialIndexPath = indexPath
-        longPressReorderSnapshot = snapshopOfView(cell!)
+        longPressReorderSnapshot = snapshot(of: cell!)
         var center = cell!.center
         longPressReorderSnapshot.center = center
         longPressReorderSnapshot.alpha = 0.0
@@ -71,7 +70,7 @@ public extension LongPressTableViewReorderer {
         }) 
     }
     
-    fileprivate func reorderCell(_ cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, inView view: UITableView, location: CGPoint) {
+    fileprivate func reorder(_ cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
         guard cell != nil else { return }
         guard indexPath != nil else { return }
         
@@ -86,7 +85,7 @@ public extension LongPressTableViewReorderer {
         }
     }
     
-    fileprivate func finishReorderCell(_ cell: UITableViewCell?, inView view: UITableView) {
+    fileprivate func finishReordering(of cell: UITableViewCell?, in view: UITableView) {
         guard let initPath = longPressReorderInitialIndexPath else { return }
         guard let endCell = cell ?? view.cellForRow(at: initPath) else { return }
         
@@ -101,12 +100,12 @@ public extension LongPressTableViewReorderer {
                     self.longPressReorderInitialIndexPath = nil
                     self.longPressReorderSnapshot.removeFromSuperview()
                     self.longPressReorderSnapshot = nil
-                    self.longPressReorderingDidFinishInTableView(view)
+                    self.longPressReorderingDidFinish(in: view)
                 }
         })
     }
     
-    fileprivate func snapshopOfView(_ inputView: UIView) -> UIView {
+    fileprivate func snapshot(of inputView: UIView) -> UIView {
         UIGraphicsBeginImageContextWithOptions(inputView.bounds.size, false, 0.0)
         guard let context = UIGraphicsGetCurrentContext() else { return UIView() }
         inputView.layer.render(in: context)
