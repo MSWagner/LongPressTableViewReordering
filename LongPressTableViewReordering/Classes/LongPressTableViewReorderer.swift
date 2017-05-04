@@ -95,18 +95,16 @@ extension LongPressTableViewReorderer {
 
 fileprivate extension LongPressTableViewReorderer {
     
-    func beginReordering(_ cell: UITableViewCell, at path: IndexPath, in view: UITableView, point: CGPoint) {
-        let canMove = delegate?.tableView?(view, canMoveRowAt: path) ?? false
-        guard canMove else { return }
-        
-        delegate?.longPressReorderingDidBegin(in: view)
+    func beginReordering(_ cell: UITableViewCell?, at path: IndexPath?, in view: UITableView, point: CGPoint) {
+        guard
+            let cell = cell,
+            let path = path,
+            delegate?.tableView?(view, canMoveRowAt: path) ?? false
+            else { return }
         
         initialIndexPath = path
-        
-        let snapshot = getSnapshotView(for: cell)
-        view.addSubview(snapshot)
-        self.snapshot = snapshot
-        animateInSnapshot(for: cell, at: point)
+        setupSnapshot(for: cell, in: view, at: point)
+        delegate?.longPressReorderingDidBegin(in: view)
     }
     
     func reorderCell(at path: IndexPath, in view: UITableView, point: CGPoint) {
@@ -155,25 +153,29 @@ fileprivate extension LongPressTableViewReorderer {
 
 fileprivate extension LongPressTableViewReorderer {
     
-    func animateInSnapshot(for cell: UITableViewCell, at point: CGPoint) {
-        guard let snapshot = snapshot else { return }
+    func animateInAnimation(for cell: UITableViewCell, at point: CGPoint) -> () -> () {
         
         var center = cell.center
         let scale = reorderingScale
-        let duration = reorderingScaleDuration
         let alpha = reorderingAlpha
         
-        snapshot.alpha = 0.0
-        snapshot.center = center
-        
-        let animation = {
+        return {
             cell.alpha = 0.0
             center.y = point.y
-            snapshot.alpha = alpha
-            snapshot.center = center
-            snapshot.transform = CGAffineTransform(scaleX: scale, y: scale)
+            self.snapshot?.alpha = alpha
+            self.snapshot?.center = center
+            self.snapshot?.transform = CGAffineTransform(scaleX: scale, y: scale)
         }
+    }
+    
+    func animateInSnapshot(for cell: UITableViewCell, at point: CGPoint) {
+        guard let snapshot = snapshot else { return }
         
+        snapshot.alpha = 0.0
+        snapshot.center = cell.center
+        
+        let duration = reorderingScaleDuration
+        let animation = animateInAnimation(for: cell, at: point)
         UIView.animate(withDuration: duration, animations: animation) { finished in
             guard finished else { return }
             cell.isHidden = true
@@ -188,6 +190,13 @@ fileprivate extension LongPressTableViewReorderer {
         snapshot.layer.shadowRadius = 5.0
         snapshot.layer.shadowOpacity = 0.4
         return snapshot
+    }
+    
+    func setupSnapshot(for cell: UITableViewCell, in view: UITableView, at point: CGPoint) {
+        let snapshot = getSnapshotView(for: cell)
+        view.addSubview(snapshot)
+        self.snapshot = snapshot
+        animateInSnapshot(for: cell, at: point)
     }
     
     func takeSnapshot(of cell: UITableViewCell) -> UIImage {
