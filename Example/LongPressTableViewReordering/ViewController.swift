@@ -36,11 +36,11 @@ class ViewController: UIViewController {
 extension ViewController: LongPressTableViewReorderDelegate {
     
     func longPressReorderingDidBegin(in tableView: UITableView) {
-        print("Reordering began")
+        print("Reordering did begin")
     }
     
-    func longPressReorderingDidFinish(in tableView: UITableView) {
-        print("Reordering ended")
+    func longPressReorderingDidEnd(in tableView: UITableView) {
+        print("Reordering did end")
     }
 }
 
