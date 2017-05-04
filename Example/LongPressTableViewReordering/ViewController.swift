@@ -12,37 +12,43 @@ import LongPressTableViewReordering
 class ViewController: UIViewController {
 
     
-    // MARK: - Properties
-    
-    var longPressReorderSnapshot: UIView!
-    
-    var longPressReorderInitialIndexPath: IndexPath!
-    
-    
     // MARK: - Outlets
     
     @IBOutlet weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
-            let action = #selector(handleLongPressReorderGesture(_:))
-            enableLongPressReordering(for: tableView, target: self, action: action)
+            reorderer.enableLongPressReordering(for: tableView)
         }
     }
     
-    func longPressReorderingDidFinish(in tableView: UITableView) {
-        print("BABOOM")
+    
+    // MARK: - Properties
+    
+    fileprivate lazy var reorderer: LongPressTableViewReorderer = {
+        let reorderer = LongPressTableViewReorderer()
+        reorderer.delegate = self
+        return reorderer
+    }()
+    
+}
+
+
+extension ViewController: LongPressTableViewReorderDelegate {
+    
+    func longPressReorderingDidBegin(in tableView: UITableView) {
+        print("Reordering began")
     }
     
-    func handleLongPressReorderGesture(_ gesture: UILongPressGestureRecognizer) {
-        longPressReorderGestureChanged(gesture)
+    func longPressReorderingDidFinish(in tableView: UITableView) {
+        print("Reordering ended")
     }
 }
 
 
 
-// MARK: - LongPressTableViewReorderer
+// MARK: - UITableViewDataSource
 
-extension ViewController: LongPressTableViewReorderer {
+extension ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -52,23 +58,17 @@ extension ViewController: LongPressTableViewReorderer {
         return 10
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell") ?? UITableViewCell(style: .default, reuseIdentifier: "Cell")
-        cell.textLabel?.text = "Test Cell"
-        return cell
-    }
-}
-
-
-
-// MARK: - UITableViewDelegate
-
-extension ViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        cell = cell ?? UITableViewCell(style: .default, reuseIdentifier: "Cell")
+        cell.textLabel?.text = "Test Cell"
+        return cell
     }
 }
