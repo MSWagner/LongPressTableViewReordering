@@ -8,38 +8,29 @@
 
 ## What is this?
 
-LongPressTableViewReordering is a Swift library, that lets you reorder
-cells in a UITableView by long pressing any cell in the table view.
-
-
-
-## Acknowledgement
-
-This project is a Swift adaption of the original obj-c approach posted
-by Soheil Ahzarpour on raywenderlich.com, March 24, 2014:
+`LongPressTableViewReordering` is a Swift library that lets users long
+press to reorder cells in a table view. It is a Swift adaption of this
+original Objective-C approach, posted on March 24, 2014:
 
 [Read the original post](https://www.raywenderlich.com/63089/cookbook-moving-table-view-cells-with-a-long-press-gesture)
 
-I will add more features to this lib if I need more in my own projects,
-but wherever the project goes, it wouldn't have existed without Soheil.
+I will add more features to this lib if I need more in my own projects.
 
 
 
 ## How does it work?
 
 To add long press reorder functionality to a table view, make the data
-source implement the LongPressTableViewReorderer protocol as well. The
-protocol (due to Swift limitations) must be a bit tweaked to work, but
-it is fairly straightforward.
+source implement `LongPressTableViewReorderer`, then do the following:
 
 First, the protocol requires two backing fields. Just declare them and
-leave them without an initial value. You will never use the properties
-yourself, but the protocol extension will use them under the hood.
+leave them without initial values. You will never use these properties
+yourself, but the reorderer will use them under the hood.
 
-Second, call the `enableLongPressReorderingForTableView(...)` function
-to enable long press reordering. Since a protocol extension cannot set
-a target action, you must inject a gesture listener function as use it
-to call `longPressReorderGestureChanged(...)` from your class.
+Now you can call `enableLongPressReorderingForTableView` to let a user 
+reorder cells with a long press. Since a protocol extension cannot set
+target actions, you must inject a gesture listener that is responsible
+to call `longPressReorderGestureChanged` from your class.
 
 If you know a better way to achieve the same result, feel free to help.
 

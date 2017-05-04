@@ -1,15 +1,14 @@
 Pod::Spec.new do |s|
   s.name             = 'LongPressTableViewReordering'
-  s.version          = '0.2.0'
-s.summary          = 'LongPressTableViewReordering lets you long press to reorder cells in a UITableView.'
+  s.version          = '0.3.0'
+s.summary          = 'LongPressTableViewReordering lets you long press to reorder table view cells.'
 
   s.description      = <<-DESC
-LongPressTableViewReordering is a Swift library that lets you
-long press to reorder cells in a UITableView.
-
-LongPressTableViewReorderer extends the UITableViewDataSource
-protocol. Just implement the protocol to automatically enable
-this functionality for any table view.
+LongPressTableViewReordering is a library that makes it easy
+to let users long press to reorder cells in a table view. To
+use it, implement the `LongPressTableViewReorderer` protocol
+instead of `UITableViewDataSource` and use it as data source.
+This will automatically enable long press to reorder.
 
                        DESC
 

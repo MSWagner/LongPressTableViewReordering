@@ -23,7 +23,7 @@ public extension LongPressTableViewReorderer {
     
     // MARK: - Public functions
     
-    public func enableLongPressReordering(for view: UITableView, withTarget target: AnyObject?, action: Selector) {
+    public func enableLongPressReordering(for view: UITableView, target: AnyObject?, action: Selector) {
         let longPress = UILongPressGestureRecognizer(target: target, action: action)
         view.addGestureRecognizer(longPress)
     }
@@ -35,9 +35,9 @@ public extension LongPressTableViewReorderer {
         let cell = indexPath != nil ? view.cellForRow(at: indexPath!) : nil
         
         switch gesture.state {
-        case .began: beginReordering(of: cell, atIndexPath: indexPath, in: view, location: location)
-        case .changed: reorder(cell, atIndexPath: indexPath, in: view, location: location)
-        default: finishReordering(of: cell, in: view)
+        case .began: beginReordering(cell, at: indexPath, in: view, location: location)
+        case .changed: reorderCell(at: indexPath, in: view, location: location)
+        default: endReordering(cell, in: view)
         }
     }
     
@@ -45,47 +45,49 @@ public extension LongPressTableViewReorderer {
     
     // MARK: - Private functions
     
-    fileprivate func beginReordering(of cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
-        let canMove = tableView!(view, canMoveRowAt: indexPath!)
-        guard cell != nil, indexPath != nil, canMove else { return }
+    fileprivate func beginReordering(_ cell: UITableViewCell?, at indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
+        guard let cell = cell, let indexPath = indexPath else { return }
+        guard tableView!(view, canMoveRowAt: indexPath) else { return }
         
         longPressReorderInitialIndexPath = indexPath
-        longPressReorderSnapshot = snapshot(of: cell!)
-        var center = cell!.center
-        longPressReorderSnapshot.center = center
-        longPressReorderSnapshot.alpha = 0.0
+        
+        let snapShot = takeSnapshot(of: cell)
+        var center = cell.center
+        snapShot.center = center
+        snapShot.alpha = 0.0
+        
+        longPressReorderSnapshot = snapShot
         view.addSubview(longPressReorderSnapshot)
         
-        UIView.animate(withDuration: 0.25, animations: { () -> Void in
+        let animation = {
             center.y = location.y
-            self.longPressReorderSnapshot.center = center
-            self.longPressReorderSnapshot.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-            self.longPressReorderSnapshot.alpha = 0.98
-            cell!.alpha = 0.0
-            
-        }, completion: { finished in
-            if finished {
-                cell!.isHidden = true
-            }
-        }) 
+            snapShot.center = center
+            snapShot.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
+            snapShot.alpha = 0.98
+            cell.alpha = 0.0
+        }
+        
+        UIView.animate(withDuration: 0.25, animations: animation) { finished in
+            guard finished else { return }
+            cell.isHidden = true
+        }
     }
     
-    fileprivate func reorder(_ cell: UITableViewCell?, atIndexPath indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
-        guard cell != nil else { return }
-        guard indexPath != nil else { return }
+    fileprivate func reorderCell(at indexPath: IndexPath?, in view: UITableView, location: CGPoint) {
+        guard let indexPath = indexPath else { return }
         
         var center = longPressReorderSnapshot.center
         center.y = location.y
         longPressReorderSnapshot.center = center
         
-        if (indexPath != longPressReorderInitialIndexPath) {
-            tableView!(view, moveRowAt: longPressReorderInitialIndexPath, to: indexPath!)
-            view.moveRow(at: longPressReorderInitialIndexPath, to: indexPath!)
+        if indexPath != longPressReorderInitialIndexPath {
+            tableView!(view, moveRowAt: longPressReorderInitialIndexPath, to: indexPath)
+            view.moveRow(at: longPressReorderInitialIndexPath, to: indexPath)
             longPressReorderInitialIndexPath = indexPath
         }
     }
     
-    fileprivate func finishReordering(of cell: UITableViewCell?, in view: UITableView) {
+    fileprivate func endReordering(_ cell: UITableViewCell?, in view: UITableView) {
         guard let initPath = longPressReorderInitialIndexPath else { return }
         guard let endCell = cell ?? view.cellForRow(at: initPath) else { return }
         
@@ -105,10 +107,10 @@ public extension LongPressTableViewReorderer {
         })
     }
     
-    fileprivate func snapshot(of inputView: UIView) -> UIView {
-        UIGraphicsBeginImageContextWithOptions(inputView.bounds.size, false, 0.0)
+    fileprivate func takeSnapshot(of view: UIView) -> UIView {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0.0)
         guard let context = UIGraphicsGetCurrentContext() else { return UIView() }
-        inputView.layer.render(in: context)
+        view.layer.render(in: context)
         let image = UIGraphicsGetImageFromCurrentImageContext()! as UIImage
         UIGraphicsEndImageContext()
         let cellSnapshot : UIView = UIImageView(image: image)
