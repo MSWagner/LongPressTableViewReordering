@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LongPressTableViewReordering'
-  s.version          = '0.3.0'
+  s.version          = '1.0.0'
 s.summary          = 'LongPressTableViewReordering lets you long press to reorder table view cells.'
 
   s.description      = <<-DESC
