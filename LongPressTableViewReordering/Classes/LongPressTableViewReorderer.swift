@@ -75,11 +75,10 @@ extension LongPressTableViewReorderer {
     func reorderGestureDidChange(_ gesture: UILongPressGestureRecognizer) {
         let point = gesture.location(in: gesture.view)
         
-        guard
-            let view = gesture.view as? UITableView,
-            let path = view.indexPathForRow(at: point),
-            let cell = view.cellForRow(at: path)
-            else { return }
+        guard let view = gesture.view as? UITableView else { return }
+        
+        let path = view.indexPathForRow(at: point)
+        let cell = path != nil ? view.cellForRow(at: path!) : nil
         
         switch gesture.state {
         case .began: beginReorder(cell, at: path, in: view, point: point)
